@@ -1,20 +1,26 @@
 var express = require('express');
 var path = require('path');
-var mongoose = require('mongoose')
-var _ = require('underscore')
+var mongoose = require('mongoose');
+var _ = require('underscore');
 var bodyParser = require('body-parser');
-var port = process.env.PORT || 3000
+
 
 var app = express();
-var Movie = require('./models/movie')
-
-mongoose.connect('mongodb://localhost/imooc')
+var Movie = require('./models/movie');
+mongoose.connect('mongodb://47.90.35.123/imooc',{
+    // retry to connect for 60 times
+    reconnectTries: 60,
+    // wait 1 second before retrying
+    reconnectInterval: 1000
+});
+mongoose.Promise = require('bluebird');
 
 app.set('views', './views/pages');
 app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname,'public')))
 app.use(bodyParser.urlencoded({extended:true}))
 app.locals.moment = require('moment')
+var port = process.env.PORT || 3000
 app.listen(port)
 
 console.log('immoc started on port' + port)
@@ -59,6 +65,10 @@ app.get('/admin/movie',function(req,res){
     })
 })
 
+
+/*
+ * 新增电影操作
+ */
 app.post('/admin/movie/new',function(req,res){
     console.log(req.body)
     //console.log(res)
@@ -99,6 +109,10 @@ app.post('/admin/movie/new',function(req,res){
     }
 })
 
+/*
+ *更新电影操作
+ */
+
 app.get('/admin/update/:id',function(req,res){
     var id = req.params.id
     if(id){
@@ -110,6 +124,9 @@ app.get('/admin/update/:id',function(req,res){
         })
     }
 })
+/*
+ * 查看电影列表
+ */
 
 app.get('/admin/list',function(req,res){
     Movie.fetch(function(err,movies){
@@ -123,7 +140,9 @@ app.get('/admin/list',function(req,res){
     })
 })
 
-
+/*
+ * 删除电影操作
+ */
 app.delete('/admin/list',function(req,res){
     var id = req.query.id
     if (id){
