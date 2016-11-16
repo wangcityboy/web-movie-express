@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var app = express();
 var Movie = require('./models/movie');
-mongoose.connect('mongodb://47.90.35.123/imooc',{
+mongoose.connect('mongodb://localhost/imooc',{
     // retry to connect for 60 times
     reconnectTries: 60,
     // wait 1 second before retrying
