@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var app = express();
 var Movie = require('./models/movie');
-mongoose.connect('mongodb://47.90.35.123/imooc',{
+mongoose.connect('mongodb://120.25.83.199:27017/imooc',{
     // retry to connect for 60 times
     reconnectTries: 60,
     // wait 1 second before retrying
@@ -23,7 +23,7 @@ app.locals.moment = require('moment')
 var port = process.env.PORT || 3000
 app.listen(port)
 
-console.log('immoc started on port' + port)
+console.log('immoc started on port:' + port)
 
 app.get('/',function(req,res){
     Movie.fetch(function(err,movies){
